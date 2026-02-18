@@ -16,6 +16,7 @@
         body { 
             font-family: 'Roboto', sans-serif; 
             background-color: #5d4037; 
+            /* Pattern nền giấy cũ */
             background-image: linear-gradient(30deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(150deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(30deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(150deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), radial-gradient(20% 20%, transparent 1%, transparent 50%, #5d4037 100%);
             background-size: 80px 140px;
             display: flex; 
@@ -33,7 +34,7 @@
             border-radius: 8px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             width: 100%; 
-            max-width: 900px; /* Tăng chiều rộng để bảng đẹp hơn */
+            max-width: 900px; 
             border: 3px solid var(--border-color);
             position: relative;
         }
@@ -62,14 +63,13 @@
             width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; 
             font-size: 16px; box-sizing: border-box; background: #fff; height: 45px;
         }
-        input:focus, select:focus { border-color: var(--primary-red); outline: none; }
         button { 
             width: 100%; padding: 14px; background-color: var(--primary-red); color: white; 
             border: none; border-radius: 4px; font-weight: bold; cursor: pointer; 
             font-size: 1.1rem; text-transform: uppercase; margin-top: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        
+
         /* Result Section */
         #result { margin-top: 25px; display: none; }
         .age-header { text-align: center; font-size: 1.2rem; margin-bottom: 15px; color: #444; }
@@ -84,29 +84,43 @@
         .note { font-size: 0.8rem; color: #777; font-style: italic; margin-top: 5px; }
 
         /* Bảng Tra Cứu */
-        .table-wrapper { margin-top: 30px; border-top: 2px dashed #bbb; padding-top: 20px; }
+        .table-box {
+            margin-top: 30px;
+            border-top: 2px dashed #bbb;
+            padding-top: 15px;
+        }
+
         .table-title {
-            text-align: center; font-weight: bold; color: var(--text-main); 
-            margin-bottom: 10px; text-transform: uppercase; font-size: 1rem;
+            text-align: center; font-weight: bold; color: white; background: var(--primary-red);
+            margin-bottom: 0; padding: 10px; text-transform: uppercase; font-size: 1rem;
+            border-radius: 4px 4px 0 0;
         }
-        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 700px; }
-        th, td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; vertical-align: middle; }
-        th { background-color: var(--primary-red); color: #fff; font-weight: normal; white-space: nowrap; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
         
-        /* Cột tuổi - Chữ nhỏ hơn và căn lề trái cho dễ đọc */
+        .table-scroll { overflow-x: auto; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fff; }
+        th, td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; vertical-align: middle; }
+        th { background-color: #eee; color: #333; font-weight: bold; white-space: nowrap; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        /* Cột tuổi căn trái cho dễ nhìn */
         .col-age { 
-            font-size: 0.85rem; color: #444; text-align: left; padding-left: 10px; line-height: 1.4; 
-            letter-spacing: 0.5px;
+            text-align: left !important; 
+            padding-left: 10px !important; 
+            color: #444; 
+            font-size: 0.9rem; 
+            word-break: break-word;
+            min-width: 200px;
+        }
+        
+        .highlight-row {
+            background-color: #fff3cd !important;
+            font-weight: bold;
         }
 
-        .footer { text-align: center; font-size: 0.75rem; color: #aaa; margin-top: 20px; }
-
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             h1 { font-size: 1.5rem; }
             .container { padding: 15px; }
-            input, select { font-size: 16px; }
         }
     </style>
 </head>
@@ -141,119 +155,95 @@
 
     <div id="result"></div>
 
-    <div class="table-wrapper">
-        <div class="table-title">★ Bảng Tra Cứu (Dò Tay) ★</div>
+    <div class="table-box">
+        <div class="table-title">★ Bảng Sao (Cửu Diệu) ★</div>
         <div class="table-scroll">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 40px;">Dư</th>
-                        <th style="width: 80px;">Sao Nam</th>
-                        <th style="width: 80px;">Hạn Nam</th>
-                        <th style="width: 80px;">Sao Nữ</th>
-                        <th style="width: 80px;">Hạn Nữ</th>
+                        <th width="15%">Sao Nam</th>
+                        <th width="15%">Sao Nữ</th>
                         <th>Các Tuổi (Âm Lịch)</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>La Hầu</td>
-                        <td>Tam Kheo*</td>
-                        <td>Kế Đô</td>
-                        <td>Thiên Tinh*</td>
-                        <td class="col-age">10, 19, 28, 37, 46, 55, 64, 73, 82, 91</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Thổ Tú</td>
-                        <td>Tam Kheo</td>
-                        <td>Vân Hán</td>
-                        <td>Thiên Tinh</td>
-                        <td class="col-age">11, 20, 29, 38, 47, 56, 65, 74, 83, 92</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Thủy Diệu</td>
-                        <td>Ngũ Mộ</td>
-                        <td>Mộc Đức</td>
-                        <td>Ngũ Mộ</td>
-                        <td class="col-age">12, 21, 30, 39, 48, 57, 66, 75, 84, 93</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Thái Bạch</td>
-                        <td>Thiên Tinh</td>
-                        <td>Thái Âm</td>
-                        <td>Tam Kheo</td>
-                        <td class="col-age">13, 22, 31, 40, 49, 58, 67, 76, 85, 94</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Thái Dương</td>
-                        <td>Toán Tận</td>
-                        <td>Thổ Tú</td>
-                        <td>Huỳnh Tuyền</td>
-                        <td class="col-age">14, 23, 32, 41, 50, 59, 68, 77, 86, 95</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>Vân Hán</td>
-                        <td>Thiên La</td>
-                        <td>La Hầu</td>
-                        <td>Diêm Vương</td>
-                        <td class="col-age">15, 24, 33, 42, 51, 60, 69, 78, 87, 96</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Kế Đô</td>
-                        <td>Địa Võng</td>
-                        <td>Thái Dương</td>
-                        <td>Địa Võng</td>
-                        <td class="col-age">16, 25, 34, 43, 52, 61, 70, 79, 88, 97</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Thái Âm</td>
-                        <td>Diêm Vương</td>
-                        <td>Thái Bạch</td>
-                        <td>Thiên La</td>
-                        <td class="col-age">17, 26, 35, 44, 53, 62, 71, 80, 89, 98</td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Mộc Đức</td>
-                        <td>Huỳnh Tuyền</td>
-                        <td>Thủy Diệu</td>
-                        <td>Toán Tận</td>
-                        <td class="col-age">18, 27, 36, 45, 54, 63, 72, 81, 90, 99</td>
-                    </tr>
-                </tbody>
+                <tbody id="tableBodySao">
+                    </tbody>
             </table>
-        </div>
-        <div style="font-size: 0.8rem; font-style: italic; margin-top: 10px; color: #d32f2f; text-align: center;">
-            (*) Lưu ý quan trọng: Riêng tuổi 10 (dư 1) chỉ có Sao, chưa khởi Hạn.<br>Hạn bắt đầu tính chính thức từ 11 tuổi.
         </div>
     </div>
 
-    <div class="footer">© Bản quyền Thầy 9 Hưng</div>
+    <div class="table-box">
+        <div class="table-title" style="background: #a07e03;">★ Bảng Hạn (Niên Hạn) ★</div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="15%">Hạn Nam</th>
+                        <th width="15%">Hạn Nữ</th>
+                        <th>Các Tuổi (Âm Lịch)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBodyHan">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer" style="text-align: center; margin-top:20px; font-size: 12px; color: #888;">© Bản quyền Thầy 9 Hưng</div>
 </div>
 
 <script>
     document.getElementById('currentYear').value = new Date().getFullYear();
 
-    const db = {
-        1: { sao: { nam: "La Hầu", nu: "Kế Đô" }, han: { nam: "Tam Kheo", nu: "Thiên Tinh" } },
-        2: { sao: { nam: "Thổ Tú", nu: "Vân Hán" }, han: { nam: "Tam Kheo", nu: "Thiên Tinh" } },
-        3: { sao: { nam: "Thủy Diệu", nu: "Mộc Đức" }, han: { nam: "Ngũ Mộ", nu: "Ngũ Mộ" } },
-        4: { sao: { nam: "Thái Bạch", nu: "Thái Âm" }, han: { nam: "Thiên Tinh", nu: "Tam Kheo" } },
-        5: { sao: { nam: "Thái Dương", nu: "Thổ Tú" }, han: { nam: "Toán Tận", nu: "Huỳnh Tuyền" } },
-        6: { sao: { nam: "Vân Hán", nu: "La Hầu" }, han: { nam: "Thiên La", nu: "Diêm Vương" } },
-        7: { sao: { nam: "Kế Đô", nu: "Thái Dương" }, han: { nam: "Địa Võng", nu: "Địa Võng" } },
-        8: { sao: { nam: "Thái Âm", nu: "Thái Bạch" }, han: { nam: "Diêm Vương", nu: "Thiên La" } },
-        0: { sao: { nam: "Mộc Đức", nu: "Thủy Diệu" }, han: { nam: "Huỳnh Tuyền", nu: "Toán Tận" } }
-    };
+    // DỮ LIỆU GỐC TỪ THẦY 9 HƯNG (Nhập chính xác từng con số)
+    
+    // 1. Dữ liệu Bảng Sao
+    const dataSao = [
+        { nam: "La Hầu",    nu: "Kế Đô",     ages: [10,19,28,37,46,55,64,73,82,91] },
+        { nam: "Thổ Tú",    nu: "Vân Hán",   ages: [11,20,29,38,47,56,65,74,83,92] },
+        { nam: "Thủy Diệu", nu: "Mộc Đức",   ages: [12,21,30,39,48,57,66,75,84,93] },
+        { nam: "Thái Bạch", nu: "Thái Âm",   ages: [13,22,31,40,49,58,67,76,85,94] },
+        { nam: "Thái Dương",nu: "Thổ Tú",    ages: [14,23,32,41,50,59,68,77,86,95] },
+        { nam: "Vân Hán",   nu: "La Hầu",    ages: [15,24,33,42,51,60,69,78,87,96] },
+        { nam: "Kế Đô",     nu: "Thái Dương",ages: [16,25,34,43,52,61,70,79,88,97] },
+        { nam: "Thái Âm",   nu: "Thái Bạch", ages: [17,26,35,44,53,62,71,80,89,97] }, // Lưu ý: 89-97 (Theo dữ liệu)
+        { nam: "Mộc Đức",   nu: "Thủy Diệu", ages: [18,27,36,45,54,63,72,81,90,99] }
+    ];
 
+    // 2. Dữ liệu Bảng Hạn (Đặc biệt quan trọng: đúng theo danh sách liệt kê)
+    const dataHan = [
+        { nam: "Tam Kheo",    nu: "Thiên Tinh",  ages: [11,19,20,28,37,46,55,64,73,82,91] },
+        { nam: "Ngũ Mộ",      nu: "Ngũ Mộ",      ages: [12,21,29,30,38,47,56,65,74,83,92] },
+        { nam: "Thiên Tinh",  nu: "Tam Kheo",    ages: [13,22,31,39,40,48,57,66,75,84,93] },
+        { nam: "Toán Tận",    nu: "Huỳnh Tuyền", ages: [14,23,32,41,49,50,58,67,76,85,94] },
+        { nam: "Thiên La",    nu: "Diêm Vương",  ages: [15,24,33,42,51,59,60,68,77,86,95] },
+        { nam: "Địa Võng",    nu: "Địa Võng",    ages: [16,25,34,43,52,61,69,70,78,87,96] },
+        { nam: "Diêm Vương",  nu: "Thiên La",    ages: [17,26,35,44,53,62,71,79,80,88,97] },
+        { nam: "Huỳnh Tuyền", nu: "Toán Tận",    ages: [18,27,36,45,54,63,72,81,89,90,98] }
+    ];
+
+    // Hàm hiển thị bảng (Render) khi trang web tải xong
+    function renderTables() {
+        // Render Bảng Sao
+        const tbodySao = document.getElementById('tableBodySao');
+        dataSao.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${row.nam}</td><td>${row.nu}</td><td class="col-age">${row.ages.join('-')}</td>`;
+            tbodySao.appendChild(tr);
+        });
+
+        // Render Bảng Hạn
+        const tbodyHan = document.getElementById('tableBodyHan');
+        dataHan.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${row.nam}</td><td>${row.nu}</td><td class="col-age">${row.ages.join('-')}</td>`;
+            tbodyHan.appendChild(tr);
+        });
+    }
+
+    renderTables();
+
+    // Hàm Tính Toán
     function calculate() {
         const currentYear = parseInt(document.getElementById('currentYear').value);
         const birthYearInput = document.getElementById('birthYear').value;
@@ -266,42 +256,75 @@
         }
         
         const birthYear = parseInt(birthYearInput);
-        const lunarAge = currentYear - birthYear + 1;
+        const lunarAge = currentYear - birthYear + 1; // Tuổi mụ
 
         let html = `<div class="age-header">Năm ${currentYear}, gia chủ <b>${lunarAge} tuổi</b> (ÂL)</div>`;
         html += `<div class="card-container">`;
 
-        if (lunarAge < 10) {
-            html += `
+        // --- TÌM SAO ---
+        // Quét trong dataSao, xem tuổi có nằm trong mảng ages không
+        let saoResult = "Chưa khởi";
+        let foundSao = false;
+        
+        for (let item of dataSao) {
+            if (item.ages.includes(lunarAge)) {
+                saoResult = (gender === 'nam') ? item.nam : item.nu;
+                foundSao = true;
+                break;
+            }
+        }
+
+        // --- TÌM HẠN ---
+        // Quét trong dataHan
+        let hanResult = "Chưa khởi";
+        let foundHan = false;
+
+        for (let item of dataHan) {
+            if (item.ages.includes(lunarAge)) {
+                hanResult = (gender === 'nam') ? item.nam : item.nu;
+                foundHan = true;
+                break;
+            }
+        }
+
+        // --- HIỂN THỊ KẾT QUẢ ---
+        if (!foundSao && !foundHan) {
+             html += `
                 <div class="card" style="border-top-color: #999;">
                     <div class="lbl">KẾT LUẬN</div>
                     <div class="val" style="color: #666; font-size: 1.3rem;">Chưa khởi Sao Hạn</div>
-                    <div class="note">Sao tính từ 10 tuổi, Hạn tính từ 11 tuổi</div>
-                </div>`;
-        } else if (lunarAge === 10) {
-            const data = db[1];
-            html += `
-                <div class="card">
-                    <div class="lbl">Sao Chiếu Mệnh</div>
-                    <div class="val">${data.sao[gender]}</div>
-                </div>
-                <div class="card" style="border-top-color: #999; background: #fafafa;">
-                    <div class="lbl">Hạn (Niên Hạn)</div>
-                    <div class="val" style="color: #999; font-size: 1.3rem;">Chưa Có Hạn</div>
-                    <div class="note">10 tuổi có Sao nhưng chưa khởi Hạn</div>
+                    <div class="note">Sao bắt đầu từ 10, Hạn bắt đầu từ 11</div>
                 </div>`;
         } else {
-            const rem = lunarAge % 9;
-            const data = db[rem];
-            html += `
+            // Card Sao
+            if (foundSao) {
+                html += `
                 <div class="card">
                     <div class="lbl">Sao Chiếu Mệnh</div>
-                    <div class="val">${data.sao[gender]}</div>
-                </div>
+                    <div class="val">${saoResult}</div>
+                </div>`;
+            } else {
+                 html += `
+                <div class="card" style="border-top-color: #ccc;">
+                    <div class="lbl">Sao Chiếu Mệnh</div>
+                    <div class="val" style="color:#999; font-size:1.2rem;">Chưa có</div>
+                </div>`;
+            }
+
+            // Card Hạn
+            if (foundHan) {
+                 html += `
                 <div class="card" style="border-top-color: #d4af37;">
                     <div class="lbl">Hạn (Niên Hạn)</div>
-                    <div class="val" style="color: #b78a02;">${data.han[gender]}</div>
+                    <div class="val" style="color: #b78a02;">${hanResult}</div>
                 </div>`;
+            } else {
+                 html += `
+                <div class="card" style="border-top-color: #ccc; background:#fafafa;">
+                    <div class="lbl">Hạn (Niên Hạn)</div>
+                    <div class="val" style="color:#999; font-size:1.2rem;">Chưa khởi Hạn</div>
+                </div>`;
+            }
         }
         
         html += `</div>`; 
