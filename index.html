@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Thầy 9 Hưng - Tra Cứu Sao Hạn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #b71c1c; 
+            --paper-bg: #fffbf0;    
+            --border-color: #d4af37; 
+            --text-main: #333333;
+        }
+
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #5d4037; 
+            background-image: linear-gradient(30deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(150deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(30deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), linear-gradient(150deg, #4e342e 12%, transparent 12.5%, transparent 87%, #4e342e 87.5%, #4e342e), radial-gradient(20% 20%, transparent 1%, transparent 50%, #5d4037 100%);
+            background-size: 80px 140px;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .container { 
+            background: var(--paper-bg); 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            width: 100%; 
+            max-width: 900px; /* Tăng chiều rộng để bảng đẹp hơn */
+            border: 3px solid var(--border-color);
+            position: relative;
+        }
+
+        /* Họa tiết góc */
+        .corner { position: absolute; width: 15px; height: 15px; border: 3px solid var(--primary-red); }
+        .tl { top: 5px; left: 5px; border-right: 0; border-bottom: 0; }
+        .tr { top: 5px; right: 5px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 5px; left: 5px; border-right: 0; border-top: 0; }
+        .br { bottom: 5px; right: 5px; border-left: 0; border-top: 0; }
+
+        h1 { 
+            text-align: center; color: var(--primary-red); margin: 5px 0; 
+            font-family: 'Merriweather', serif; font-size: 1.8rem; text-transform: uppercase;
+        }
+        .subtitle {
+            text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px;
+            font-style: italic; border-bottom: 2px solid #e0e0e0; padding-bottom: 15px;
+        }
+
+        /* Input Section */
+        .input-section { display: flex; gap: 15px; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 140px; }
+        label { display: block; margin-bottom: 5px; color: var(--text-main); font-weight: bold; font-size: 0.9rem; }
+        input, select { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; 
+            font-size: 16px; box-sizing: border-box; background: #fff; height: 45px;
+        }
+        input:focus, select:focus { border-color: var(--primary-red); outline: none; }
+        button { 
+            width: 100%; padding: 14px; background-color: var(--primary-red); color: white; 
+            border: none; border-radius: 4px; font-weight: bold; cursor: pointer; 
+            font-size: 1.1rem; text-transform: uppercase; margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        /* Result Section */
+        #result { margin-top: 25px; display: none; }
+        .age-header { text-align: center; font-size: 1.2rem; margin-bottom: 15px; color: #444; }
+        .card-container { display: flex; gap: 10px; flex-wrap: wrap; }
+        .card { 
+            background: #fff; border: 1px solid #dcdcdc; border-top: 4px solid var(--primary-red);
+            padding: 15px; flex: 1; min-width: 250px; border-radius: 4px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;
+        }
+        .lbl { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;}
+        .val { font-size: 1.6rem; font-weight: bold; color: var(--primary-red); font-family: 'Merriweather', serif; }
+        .note { font-size: 0.8rem; color: #777; font-style: italic; margin-top: 5px; }
+
+        /* Bảng Tra Cứu */
+        .table-wrapper { margin-top: 30px; border-top: 2px dashed #bbb; padding-top: 20px; }
+        .table-title {
+            text-align: center; font-weight: bold; color: var(--text-main); 
+            margin-bottom: 10px; text-transform: uppercase; font-size: 1rem;
+        }
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 700px; }
+        th, td { border: 1px solid #ccc; padding: 10px 5px; text-align: center; vertical-align: middle; }
+        th { background-color: var(--primary-red); color: #fff; font-weight: normal; white-space: nowrap; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        
+        /* Cột tuổi - Chữ nhỏ hơn và căn lề trái cho dễ đọc */
+        .col-age { 
+            font-size: 0.85rem; color: #444; text-align: left; padding-left: 10px; line-height: 1.4; 
+            letter-spacing: 0.5px;
+        }
+
+        .footer { text-align: center; font-size: 0.75rem; color: #aaa; margin-top: 20px; }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.5rem; }
+            .container { padding: 15px; }
+            input, select { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+
+    <h1>Thầy 9 Hưng</h1>
+    <div class="subtitle">Tra Cứu Sao Hạn & Bảng Lập Thành</div>
+    
+    <div class="input-section">
+        <div class="form-group">
+            <label>Năm Xem (ÂL)</label>
+            <input type="number" id="currentYear">
+        </div>
+        <div class="form-group">
+            <label>Năm Sinh</label>
+            <input type="number" id="birthYear" placeholder="Ví dụ: 1993">
+        </div>
+        <div class="form-group">
+            <label>Giới tính</label>
+            <select id="gender">
+                <option value="nam">Nam</option>
+                <option value="nu">Nữ</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="calculate()">Xem Kết Quả</button>
+
+    <div id="result"></div>
+
+    <div class="table-wrapper">
+        <div class="table-title">★ Bảng Tra Cứu (Dò Tay) ★</div>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">Dư</th>
+                        <th style="width: 80px;">Sao Nam</th>
+                        <th style="width: 80px;">Hạn Nam</th>
+                        <th style="width: 80px;">Sao Nữ</th>
+                        <th style="width: 80px;">Hạn Nữ</th>
+                        <th>Các Tuổi (Âm Lịch)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>La Hầu</td>
+                        <td>Tam Kheo*</td>
+                        <td>Kế Đô</td>
+                        <td>Thiên Tinh*</td>
+                        <td class="col-age">10, 19, 28, 37, 46, 55, 64, 73, 82, 91</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Thổ Tú</td>
+                        <td>Tam Kheo</td>
+                        <td>Vân Hán</td>
+                        <td>Thiên Tinh</td>
+                        <td class="col-age">11, 20, 29, 38, 47, 56, 65, 74, 83, 92</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Thủy Diệu</td>
+                        <td>Ngũ Mộ</td>
+                        <td>Mộc Đức</td>
+                        <td>Ngũ Mộ</td>
+                        <td class="col-age">12, 21, 30, 39, 48, 57, 66, 75, 84, 93</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Thái Bạch</td>
+                        <td>Thiên Tinh</td>
+                        <td>Thái Âm</td>
+                        <td>Tam Kheo</td>
+                        <td class="col-age">13, 22, 31, 40, 49, 58, 67, 76, 85, 94</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Thái Dương</td>
+                        <td>Toán Tận</td>
+                        <td>Thổ Tú</td>
+                        <td>Huỳnh Tuyền</td>
+                        <td class="col-age">14, 23, 32, 41, 50, 59, 68, 77, 86, 95</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Vân Hán</td>
+                        <td>Thiên La</td>
+                        <td>La Hầu</td>
+                        <td>Diêm Vương</td>
+                        <td class="col-age">15, 24, 33, 42, 51, 60, 69, 78, 87, 96</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Kế Đô</td>
+                        <td>Địa Võng</td>
+                        <td>Thái Dương</td>
+                        <td>Địa Võng</td>
+                        <td class="col-age">16, 25, 34, 43, 52, 61, 70, 79, 88, 97</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Thái Âm</td>
+                        <td>Diêm Vương</td>
+                        <td>Thái Bạch</td>
+                        <td>Thiên La</td>
+                        <td class="col-age">17, 26, 35, 44, 53, 62, 71, 80, 89, 98</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>Mộc Đức</td>
+                        <td>Huỳnh Tuyền</td>
+                        <td>Thủy Diệu</td>
+                        <td>Toán Tận</td>
+                        <td class="col-age">18, 27, 36, 45, 54, 63, 72, 81, 90, 99</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="font-size: 0.8rem; font-style: italic; margin-top: 10px; color: #d32f2f; text-align: center;">
+            (*) Lưu ý quan trọng: Riêng tuổi 10 (dư 1) chỉ có Sao, chưa khởi Hạn.<br>Hạn bắt đầu tính chính thức từ 11 tuổi.
+        </div>
+    </div>
+
+    <div class="footer">© Bản quyền Thầy 9 Hưng</div>
+</div>
+
+<script>
+    document.getElementById('currentYear').value = new Date().getFullYear();
+
+    const db = {
+        1: { sao: { nam: "La Hầu", nu: "Kế Đô" }, han: { nam: "Tam Kheo", nu: "Thiên Tinh" } },
+        2: { sao: { nam: "Thổ Tú", nu: "Vân Hán" }, han: { nam: "Tam Kheo", nu: "Thiên Tinh" } },
+        3: { sao: { nam: "Thủy Diệu", nu: "Mộc Đức" }, han: { nam: "Ngũ Mộ", nu: "Ngũ Mộ" } },
+        4: { sao: { nam: "Thái Bạch", nu: "Thái Âm" }, han: { nam: "Thiên Tinh", nu: "Tam Kheo" } },
+        5: { sao: { nam: "Thái Dương", nu: "Thổ Tú" }, han: { nam: "Toán Tận", nu: "Huỳnh Tuyền" } },
+        6: { sao: { nam: "Vân Hán", nu: "La Hầu" }, han: { nam: "Thiên La", nu: "Diêm Vương" } },
+        7: { sao: { nam: "Kế Đô", nu: "Thái Dương" }, han: { nam: "Địa Võng", nu: "Địa Võng" } },
+        8: { sao: { nam: "Thái Âm", nu: "Thái Bạch" }, han: { nam: "Diêm Vương", nu: "Thiên La" } },
+        0: { sao: { nam: "Mộc Đức", nu: "Thủy Diệu" }, han: { nam: "Huỳnh Tuyền", nu: "Toán Tận" } }
+    };
+
+    function calculate() {
+        const currentYear = parseInt(document.getElementById('currentYear').value);
+        const birthYearInput = document.getElementById('birthYear').value;
+        const gender = document.getElementById('gender').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!birthYearInput || !currentYear) {
+            alert("Vui lòng nhập đầy đủ Năm Xem và Năm Sinh!");
+            return;
+        }
+        
+        const birthYear = parseInt(birthYearInput);
+        const lunarAge = currentYear - birthYear + 1;
+
+        let html = `<div class="age-header">Năm ${currentYear}, gia chủ <b>${lunarAge} tuổi</b> (ÂL)</div>`;
+        html += `<div class="card-container">`;
+
+        if (lunarAge < 10) {
+            html += `
+                <div class="card" style="border-top-color: #999;">
+                    <div class="lbl">KẾT LUẬN</div>
+                    <div class="val" style="color: #666; font-size: 1.3rem;">Chưa khởi Sao Hạn</div>
+                    <div class="note">Sao tính từ 10 tuổi, Hạn tính từ 11 tuổi</div>
+                </div>`;
+        } else if (lunarAge === 10) {
+            const data = db[1];
+            html += `
+                <div class="card">
+                    <div class="lbl">Sao Chiếu Mệnh</div>
+                    <div class="val">${data.sao[gender]}</div>
+                </div>
+                <div class="card" style="border-top-color: #999; background: #fafafa;">
+                    <div class="lbl">Hạn (Niên Hạn)</div>
+                    <div class="val" style="color: #999; font-size: 1.3rem;">Chưa Có Hạn</div>
+                    <div class="note">10 tuổi có Sao nhưng chưa khởi Hạn</div>
+                </div>`;
+        } else {
+            const rem = lunarAge % 9;
+            const data = db[rem];
+            html += `
+                <div class="card">
+                    <div class="lbl">Sao Chiếu Mệnh</div>
+                    <div class="val">${data.sao[gender]}</div>
+                </div>
+                <div class="card" style="border-top-color: #d4af37;">
+                    <div class="lbl">Hạn (Niên Hạn)</div>
+                    <div class="val" style="color: #b78a02;">${data.han[gender]}</div>
+                </div>`;
+        }
+        
+        html += `</div>`; 
+
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = html;
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
